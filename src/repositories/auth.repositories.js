@@ -9,8 +9,8 @@ export async function findUserByEmail(email) {
     return await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
   }
 
-export async function postUser(name, lastName, email, location, hash) {
-    return await db.query(`INSERT INTO users (name, "lastName, email, password, location) VALUES ($1, $2, $3)`, [name, lastName, email, hash, location])
+export async function postUser(name, lastName, email, phone, hash) {
+    return await db.query(`INSERT INTO users (name, "lastName", email, phone, password) VALUES ($1, $2, $3, $4, $5)`, [name, lastName, email, phone, hash])
 }
 
 export async function deleteSessions(user) {
