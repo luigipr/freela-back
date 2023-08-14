@@ -15,8 +15,8 @@ export async function userById(id) {
     return await db.query(`SELECT * FROM users WHERE id = $1`, [id])
 }
 
-export async function servicesByUserId(user) {
-    return await db.query(`SELECT * FROM services WHERE services.available = true AND services."userId" = $1`, [user.id]) 
+export async function servicesByUserId(id) {
+    return await db.query(`SELECT * FROM services WHERE services."userId" = $1`, [id]) 
 }
 
 export async function servicesByLocation(location) {

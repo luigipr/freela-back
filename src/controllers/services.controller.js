@@ -20,9 +20,10 @@ export async function getServices(req, res) {
 export async function getServicesByUserId(req, res) {
     const {token}= req.headers;
     try{
-        const session = await getSession(token)
-        console.log(session.rows)
-        const userServices = await servicesByUserId(session.userId);
+        const {id} = req.params
+        //const session = await getSession(token)
+        //console.log(session.rows)
+        const userServices = await servicesByUserId(id);
         //const servicesById = await db.query(`SELECT * FROM services WHERE services.available = true AND services."userId" = $1`, [user.id])
         res.status(200).send(userServices.rows)
     } catch (err) {
