@@ -6,8 +6,13 @@ export async function allServices() {
 } 
 
 export async function servicebyId(id) {
-    return await db.query(`SELECT * FROM services WHERE services.id = $1`, [id])
-    
+    const query = await db.query(`SELECT services.name AS servicename, services.*, users.name AS username, users.* FROM services JOIN users ON users.id = services."userId" WHERE services.id = $1`, [id]);  
+    console.log(query)
+    return query;
+}
+
+export async function userById(id) {
+    return await db.query(`SELECT * FROM users WHERE id = $1`, [id])
 }
 
 export async function servicesByUserId(user) {
@@ -25,8 +30,8 @@ export async function getSession(token) {
 
 export async function insertService(name,description,image,price,uf, city, userId) {
     console.log(name,description,image,price,uf, city, userId)
-    return await db.query(`INSERT INTO services (name,description,image,price,uf, city, "userId") VALUES
-    ($1, $2, $3, $4, $5, $6, $7)`, [name, description, image, price, uf,city,userId])
+    return await db.query(`INSERT INTO services (name, description, image, price, uf, city, "userId") VALUES
+    ($1, $2, $3, $4, $5, $6, $7)`, [name, description, image, price, uf, city, userId])
 }
 
 export async function serviceInactive(id) {

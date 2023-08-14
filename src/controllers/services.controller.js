@@ -1,4 +1,4 @@
-import { allServices, servicesByUserId, servicesByLocation, getSession, insertService, serviceInactive, servicebyId } from "../repositories/services.repositories.js"
+import { allServices, servicesByUserId, servicesByLocation, getSession, insertService, serviceInactive, servicebyId, userById } from "../repositories/services.repositories.js"
 
 
 
@@ -8,7 +8,7 @@ export async function getServices(req, res) {
     try{
     //const session = getUserId(token)
     const services = await allServices()
-    console.log(services.rows)
+    
     //const allServices = await db.query(`SELECT * FROM services WHERE services.available = true LIMIT 30`)
     res.status(200).send(services.rows)
     } catch (err) {
@@ -21,6 +21,7 @@ export async function getServicesByUserId(req, res) {
     const {token}= req.headers;
     try{
         const session = await getSession(token)
+        console.log(session.rows)
         const userServices = await servicesByUserId(session.userId);
         //const servicesById = await db.query(`SELECT * FROM services WHERE services.available = true AND services."userId" = $1`, [user.id])
         res.status(200).send(userServices.rows)
@@ -30,13 +31,30 @@ export async function getServicesByUserId(req, res) {
     }
 }
 
+export async function getUserById(req, res) {
+    const userId = req.body;
+
+    const user = await userById(userId)
+
+    return res.status(200).send(user)
+}
+
 export async function getServiceById(req, res) {
     const {token} = req.headers;
-    const serviceId = req.params
+    try{
+        const serviceId = req.params
+        console.log(serviceId);
+        const {id } = serviceId
+        console.log(id)
+        const service = await servicebyId(id)
 
-    const service = await servicebyId(serviceId)
+        console.log(service.rows)
 
-    return res.status(200).send.send(service.rows)
+        return res.status(200).send(service.rows[0])
+    } catch (err) {
+        console.log(err)
+        res.status(500).send(err.message)
+    }
 }
 
 export async function getServicesByLocation(req, res) {
@@ -45,7 +63,7 @@ export async function getServicesByLocation(req, res) {
     try{
         const LocalizeServices = await servicesByLocation(location)
         //const servicesByLocation = await db.query(`SELECT * FROM services WHERE services.available = true AND services.location = $1`, [location])
-        res.status(200).send(LocalizeServices)
+        res.status(200).send(LocalizeServices.rows)
     } catch (err) {
         console.log(err)
         res.status(500).send(err.message)

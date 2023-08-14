@@ -9,7 +9,7 @@ const servicesRouter = Router()
 
 servicesRouter.get("/home", validateToken, getServices)
 servicesRouter.get("/perfil/:id", validateToken, getServicesByUserId)
-servicesRouter.get("./detalhes/:id", validateToken, getServiceById)
+servicesRouter.get("/detalhes/:id", validateToken, getServiceById)
 servicesRouter.post("/novoservico", validateToken, validateSchema(serviceSchema), postService)
 
 
